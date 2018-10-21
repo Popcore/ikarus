@@ -3,34 +3,21 @@
 #include <string>
 #include "src/serial_io.h"
 // #include "src/lidar_reader.h"
-#include "src/either.h"
 
 const std::string PORT_NAME = "/dev/tty.usbmodem1411";
 const int BAUD_RATE = 9600;
 
-Either<std::string> could_error(int my_arg) {
-    Either<std::string> out;
-
-    if (my_arg == 0) {
-        Error e;
-        e.what = "the error message";
-        out.error = &e;
-    }
-
-    out.expected = "all good";
-
-    return out;
-}
-
 int main() {
-    Either<std::string> e = could_error(0);
+    SerialPortOps *serial_ops = new AsioSerial();
 
-//    if (e.error != NULL) {
-//        std::cout << e.error->what << std::endl;
-//    }
+    ArduinoSerial serial(PORT_NAME, BAUD_RATE, serial_ops);
 
-    ArduinoSerial serial(PORT_NAME, BAUD_RATE);
-    serial.connect();
+    Error *err = serial.connect();
+
+    if (err) {
+        std::cout << err->what << std::endl;
+        return 0;
+    }
 
     std::cout << "=> type H to turn on the light, L to turn it off" << std::endl;
 
