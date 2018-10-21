@@ -5,37 +5,21 @@
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
 #include <boost/asio/serial_port.hpp>
+#include <boost/asio.hpp>
 #include <string>
 #include <iostream>
-#include <boost/asio.hpp>
 #include "serial_io.h"
 #include "either.h"
 
-boost::asio::io_context io;
-boost::asio::serial_port *port;
+// ArduinoSerial class constructor
+ArduinoSerial::ArduinoSerial(std::string port_n, int baud_r) {
+    boost::asio::io_context io;
+    port_name = port_n;
+    baud_rate = baud_r;
+}
 
-class SerialCommunicator {
-public:
-    virtual void connect() = 0;
-
-
-};
-/*
-struct Serial {
-    SerialCommunicator communicator;
-
-    Error write(std::string input) {
-        return communicator.write(input);
-    };
-
-    Either<std::byte> read() {
-        return communicator.read();
-    }
-};
- */
-
-// class constructor
-SerialComm::SerialComm(std::string port_name, int baud_rate) {
+void ArduinoSerial::connect() {
+    std::cout << port_name << std::endl;
 
     try {
         port = new boost::asio::serial_port(io, port_name);
@@ -44,21 +28,11 @@ SerialComm::SerialComm(std::string port_name, int baud_rate) {
         std::cout << "=> Error: cannot open port. Info: " << e.what() << "\n";
         exit(EXIT_FAILURE);
     }
-
-    port_name = port_name;
-    baud_rate = baud_rate;
-}
-
-// open_port creates a new io context and opens the USB
-// serial port using the specified port name and baud rate
-// (the) speed of communication over the date channel).
-void SerialComm::open_port() {
-    port->set_option(boost::asio::serial_port_base::baud_rate(baud_rate));
 }
 
 // write listens to messages from cin and writes them to
 // the open port.
-void SerialComm::write() {
+void ArduinoSerial::write() {
     std::string input;
 
     std::cout << port->is_open() <<  std::endl;
@@ -67,4 +41,8 @@ void SerialComm::write() {
         getline(std::cin, input);
         boost::asio::write(*port, boost::asio::buffer(input));
     }
+}
+
+void ArduinoSerial::read() {
+    return;
 }

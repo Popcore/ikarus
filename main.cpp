@@ -1,9 +1,7 @@
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 #include <iostream>
 #include <string>
-#include <boost/asio.hpp>
 #include "src/serial_io.h"
-#include <cctype>
 // #include "src/lidar_reader.h"
 #include "src/either.h"
 
@@ -27,16 +25,16 @@ Either<std::string> could_error(int my_arg) {
 int main() {
     Either<std::string> e = could_error(0);
 
-    if (e.error != NULL) {
-        std::cout << e.error->what << std::endl;
-    }
+//    if (e.error != NULL) {
+//        std::cout << e.error->what << std::endl;
+//    }
 
-     SerialComm serial(PORT_NAME, BAUD_RATE);
-     //serial.open_port();
+    ArduinoSerial serial(PORT_NAME, BAUD_RATE);
+    serial.connect();
 
-     std::cout << "=> type H to turn on the light, L to turn it off" << std::endl;
+    std::cout << "=> type H to turn on the light, L to turn it off" << std::endl;
 
-     serial.write();
+    serial.write();
 
     // PointCloud pointCloud("data/lidar_point_cloud.las");
 
