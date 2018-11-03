@@ -2,7 +2,6 @@
 #include <iostream>
 #include <string>
 #include "src/serial_io.h"
-// #include "src/lidar_reader.h"
 
 const std::string PORT_NAME = "/dev/tty.usbmodem1411";
 const int BAUD_RATE = 9600;
@@ -19,11 +18,9 @@ int main() {
         return 0;
     }
 
-    std::cout << "=> type H to turn on the light, L to turn it off" << std::endl;
+    std::cout << "=> type 'w' to move forward. \n 's' to go backwards. \n 'a' to go left. \n 'd' to go right. \n 'h' to go stop." << std::endl;
 
     serial.write();
-
-    // PointCloud pointCloud("data/lidar_point_cloud.las");
 
     return 0;
 }

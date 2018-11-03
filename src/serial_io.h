@@ -14,7 +14,7 @@
 // operations. Useful to hide complexity and to mock for testing.
 class SerialPortOps {
 public:
-    virtual ~SerialPortOps() = 0;
+    virtual ~SerialPortOps() {};
     virtual void set_port() = 0;
     virtual Either<bool> open_port(std::string port_name) = 0;
     virtual void write_to_port(std::string input) = 0;
@@ -38,7 +38,7 @@ public:
 // a class dealing with serial communication (i.e. USB) must implement.
 class SerialCommunicator {
 public:
-    virtual ~SerialCommunicator() = 0;
+    virtual ~SerialCommunicator() {};
     virtual Error* connect() = 0;
     virtual void write() = 0;
     virtual void read() = 0;
